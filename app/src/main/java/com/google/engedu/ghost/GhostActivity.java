@@ -65,24 +65,6 @@ public class GhostActivity extends ActionBarActivity {
         onStart(null);
     }
 
-    private void challenge() {
-        if(wordFragment.getText().toString().length() == 4
-                && sDictionary.isWord(wordFragment.getText().toString())){
-            Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            String newWord = sDictionary.getAnyWordStartingWith(wordFragment.getText().toString());
-
-            if(newWord != null){
-                Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
-                Log.d("New word", newWord);
-            }
-            else{
-                Toast.makeText(this,"Player wins!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -108,10 +90,9 @@ public class GhostActivity extends ActionBarActivity {
     private void computerTurn() {
         TextView label = (TextView) findViewById(R.id.gameStatus);
         // Do computer turn stuff then make it the user's turn again
-        if(!userTurn){
             if(wordFragment.getText().toString().length() == 4
                     && sDictionary.isWord(wordFragment.getText().toString())){
-                challenge();
+                Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
             }
             else{
                 String newWord = sDictionary.getAnyWordStartingWith(wordFragment.getText().toString());
@@ -126,10 +107,27 @@ public class GhostActivity extends ActionBarActivity {
             }
 
             userTurn = !userTurn;
-        }
+
         label.setText(USER_TURN);
     }
 
+    private void challenge() {
+        if(wordFragment.getText().toString().length() == 4
+                && sDictionary.isWord(wordFragment.getText().toString())){
+            Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            String newWord = sDictionary.getAnyWordStartingWith(wordFragment.getText().toString());
+
+            if(newWord != null){ // word doesn't exist
+                Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
+                Log.d("New word", newWord);
+            }
+            else{
+                Toast.makeText(this,"Player wins!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     /**
      * Handler for the "Reset" button.
      * Randomly determines whether the game starts with a user turn or a computer turn.

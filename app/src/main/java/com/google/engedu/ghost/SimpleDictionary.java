@@ -41,12 +41,14 @@ public class SimpleDictionary implements GhostDictionary {
 
     private String binarySearch(String prefix) {
         int low = 0;
-        int high = words.size();
+        int high = words.size() - 1;
 
-        while(low < high){
-            int mid = low + high / 2;
+        while(low <= high){
+            int mid = (low + high) / 2;
             int compare = words.get(mid).compareToIgnoreCase(prefix);
-            if(words.get(mid).substring(0,prefix.length()).equals(prefix)){
+
+            if(words.get(mid).length() >= prefix.length()
+                    && words.get(mid).substring(0,prefix.length()).equals(prefix)){
                 return words.get(mid);
             }
             else if(compare < 0){
@@ -56,6 +58,7 @@ public class SimpleDictionary implements GhostDictionary {
                 high = mid - 1 ;
             }
         }
+
         return null;
     }
 
