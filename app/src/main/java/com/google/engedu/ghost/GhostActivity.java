@@ -22,6 +22,7 @@ public class GhostActivity extends ActionBarActivity {
     private GhostDictionary gDictionary;
     private SimpleDictionary sDictionary;
     private Button challenge;
+    private Button restart;
     private String s;
     private boolean userTurn;
     private Random random = new Random();
@@ -59,8 +60,15 @@ public class GhostActivity extends ActionBarActivity {
         challenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 challenge();
+            }
+        });
+
+        restart = (Button)findViewById(R.id.restartButton);
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStart(null);
             }
         });
         onStart(null);
