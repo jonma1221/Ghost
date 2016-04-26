@@ -23,7 +23,7 @@ public class GhostActivity extends ActionBarActivity {
     private SimpleDictionary sDictionary;
     private Button challenge;
     private String s;
-    private boolean userTurn = true;
+    private boolean userTurn;
     private Random random = new Random();
 
     private TextView wordFragment;
@@ -59,6 +59,7 @@ public class GhostActivity extends ActionBarActivity {
         challenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 challenge();
             }
         });
@@ -90,7 +91,8 @@ public class GhostActivity extends ActionBarActivity {
     private void computerTurn() {
         TextView label = (TextView) findViewById(R.id.gameStatus);
         // Do computer turn stuff then make it the user's turn again
-            if(wordFragment.getText().toString().length() == 4
+        userTurn = false;
+            if(wordFragment.getText().toString().length() >= 4
                     && sDictionary.isWord(wordFragment.getText().toString())){
                 Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
             }
@@ -99,32 +101,49 @@ public class GhostActivity extends ActionBarActivity {
                 if(newWord != null){
                     Log.d("New word", newWord);
                     s = wordFragment.getText().toString();
-                    s += newWord.substring(s.length(), s.length() + 1);
+                    if(newWord.length() > s.length()){
+                        s += newWord.substring(s.length(), s.length() + 1);
+                    }
+
                     Log.d("Adjusted word", s);
                     wordFragment.setText(s);
                 }
                 else challenge();
             }
 
-            userTurn = !userTurn;
+            userTurn = true;
 
         label.setText(USER_TURN);
     }
 
     private void challenge() {
-        if(wordFragment.getText().toString().length() == 4
-                && sDictionary.isWord(wordFragment.getText().toString())){
-            Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        if(!userTurn){
             String newWord = sDictionary.getAnyWordStartingWith(wordFragment.getText().toString());
-
-            if(newWord != null){ // word doesn't exist
-                Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
+            if(newWord != null){ // word can be formed from fragment
+                Toast.makeText(this,"Player wins!", Toast.LENGTH_SHORT).show();
                 Log.d("New word", newWord);
             }
-            else{
+            else{// no word can be formed from fragment
+                Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        else{
+            if(wordFragment.getText().toString().length() >= 4
+                    && sDictionary.isWord(wordFragment.getText().toString())){
                 Toast.makeText(this,"Player wins!", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                String newWord = sDictionary.getAnyWordStartingWith(wordFragment.getText().toString());
+                if(newWord != null){ // word can be formed from fragment
+                    Toast.makeText(this,"Computer wins!", Toast.LENGTH_SHORT).show();
+                    wordFragment.setText(newWord);
+                    Log.d("Adjusted word", s);
+                    Log.d("New word", newWord);
+                }
+                else{ // no word can be formed from fragment
+                    Toast.makeText(this,"Player wins!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
